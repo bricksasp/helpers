@@ -1,0 +1,21 @@
+{
+    "name": "bricksasp/helpers",
+    "description": "bricksasp 助手类",
+    "keywords": ["yii2", "helpers"],
+    "type": "yii2-extension",
+    "support": {
+        "issues": "https://github.com/bricksasp/helpers/issues",
+        "source": "https://github.com/bricksasp/helpers"
+    },
+    "authors": [
+        {
+            "name": "bricksasp",
+            "email": "649909457@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "bricksasp\\helpers\\": ""
+        }
+    }
+}
