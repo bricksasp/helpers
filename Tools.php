@@ -468,4 +468,15 @@ class Tools extends \yii\helpers\ArrayHelper {
 		}
 		return '';
 	}
+
+	/**
+	 * 判断微信端
+	 */
+	public static function is_wechat()
+	{
+	    if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+	        return true;
+	    }  
+        return false;
+	}
 }
