@@ -332,7 +332,7 @@ class Tools extends \yii\helpers\ArrayHelper {
 					$ags = str_replace('###', $item[$field], $v[1]);
 				} else {
 					foreach ($v[1] as &$vv) {
-						if (is_array($vv)) {
+						if (is_array($vv) && isset($item[$field])) {
 							$vv = str_replace('###', $item[$field], $vv);
 						}
 
