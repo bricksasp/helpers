@@ -35,19 +35,15 @@ class CompositeAuth extends \yii\filters\auth\AuthMethod {
 		return $this->setUid($user, $authHeader);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function handleFailure($response) {
-		Tools::exceptionBreak('token无效');
-	}
-
 	public function setUid($user, $token) {
 		$action = Yii::$app->controller->action;
 		$identity = null;
 		// 传token则设置uid
 		if ($token) {
 			$identity = $user->loginByAccessToken($token);
+			if ($identity === null) {
+				Tools::exceptionBreak(50001);
+			}
 		}
 
 		if ($identity !== null) {
