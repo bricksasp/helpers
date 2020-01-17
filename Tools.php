@@ -339,7 +339,7 @@ class Tools extends \yii\helpers\ArrayHelper {
 					}
 					$ags = $v[1];
 				}
-				if ($v[0] == 'implode' && $field == 'file_url' && count(array_filter(end($ags)))<2) {
+				if ((isset($ags[1][1]) && $ags[1][1] == '###') || ($v[0] == 'implode' && $field == 'file_url' && count(array_filter(end($ags)))<2)) {
 					$item[$field] = '';
 				}else{
 					$item[$field] = call_user_func_array($v[0], $ags);
