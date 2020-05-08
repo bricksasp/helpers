@@ -8,7 +8,7 @@ use Yii;
 
 class CompositeAuth extends \yii\filters\auth\AuthMethod {
 	public $saas_on = false;
-	public $saas_owner_id = null;
+	public $default_owner_id = null;
 	public $tokenParam = 'access-token';
 	public $tokenHeader = 'X-Token';
 	public $rbac_on = true;
@@ -22,13 +22,13 @@ class CompositeAuth extends \yii\filters\auth\AuthMethod {
 			//开启平台功能 设置数据所属
 			$action = Yii::$app->controller->action;
 			if (!in_array($action->id, $this->exemption)) {
-				$this->setOwnerId($user, $accessToken);
+				$this->setOwnerIdByAccessToken($user, $accessToken);
 			}
 		}
 
 		// 未开启平台功能 默认数据所属
 		if ($this->owner->ownerId === null) {
-			$this->owner->ownerId = $this->saas_owner_id ?? 1;
+			$this->owner->ownerId = $this->default_owner_id;
 		}
 
 		// 设置uid
@@ -55,6 +55,7 @@ class CompositeAuth extends \yii\filters\auth\AuthMethod {
 			}elseif ($identity->token_type == Token::TOKEN_TYPE_BACKEND) {
 				$this->owner->request_identity = Token::IDENTITY_CURD;
 				$this->owner->request_entrance = Token::TOKEN_TYPE_BACKEND;
+				$this->owner->ownerId = $identity->id;
 			}/*elseif ($identity->token_type == Token::TOKEN_TYPE_BACKEND) {
 				//授权用户 后期拓展
 				$this->owner->request_identity = Token::IDENTITY_AUTHORIZE;
@@ -85,9 +86,9 @@ class CompositeAuth extends \yii\filters\auth\AuthMethod {
 		Tools::exceptionBreak(50005);
 	}
 
-	public function setOwnerId($user, $token) {
-		if ($this->saas_owner_id && $token == null) {
-			$this->owner->ownerId = $this->saas_owner_id;
+	public function setOwnerIdByAccessToken($user, $token) {
+		if ($this->default_owner_id && $token == null) {
+			$this->owner->ownerId = $this->default_owner_id;
 		} else {
 			$identity = $user->loginByAccessToken($token, Token::TOKEN_TYPE_ACCESS);
 			if ($identity == null) {
